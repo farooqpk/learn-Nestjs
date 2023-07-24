@@ -4,7 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/services/prisma.service';
-import { BookMarkDto } from '../dto';
+import {
+  CreateBookMarkDto,
+  UpdateBookMarkDto,
+} from '../dto';
 
 @Injectable()
 export class BookMarkService {
@@ -13,7 +16,7 @@ export class BookMarkService {
   ) {}
 
   async createBookMark(
-    bookmarkData: BookMarkDto,
+    bookmarkData: CreateBookMarkDto,
   ) {
     try {
       await this.prisma.bookmark.create({
@@ -77,6 +80,36 @@ export class BookMarkService {
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  async updateBook(
+    id: string,
+    updateData: UpdateBookMarkDto,
+  ) {
+    try {
+      await this.prisma.bookmark.update({
+        where: { id: id },
+        data: updateData,
+      });
+      return 'updated successfully';
+    } catch (error) {
+      throw new InternalServerErrorException(
+        error.message,
+      );
+    }
+  }
+
+  async deleteBook(id: string) {
+    try {
+      await this.prisma.bookmark.delete({
+        where: { id: id },
+      });
+      return 'deleted';
+    } catch (error) {
+      throw new InternalServerErrorException(
+        error.message,
+      );
     }
   }
 }
