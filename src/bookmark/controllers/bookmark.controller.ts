@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   CreateBookMarkDto,
@@ -16,6 +17,7 @@ import {
 } from '../dto';
 import { BookMarkService } from '../services/bookmark.service';
 import { JwtGuard } from 'src/auth/guard';
+import { SampleInterceptor } from '../interceptors/sample.interceptor';
 
 @Controller('bookmark')
 export class BookmarkController {
@@ -34,16 +36,18 @@ export class BookmarkController {
     );
   }
 
+  // interceptor only applicable for this route if we want all controller we can put this to top of the class
+  @UseInterceptors(SampleInterceptor)
   @Get()
   @HttpCode(200)
-  @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   getAllBookMark() {
     return this.bookMarkServie.getAllBookMark();
   }
 
   @Get('book/:id')
   @HttpCode(200)
-  // @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   getABook(@Param('id') id: string) {
     return this.bookMarkServie.getABook(id);
   }

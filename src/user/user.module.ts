@@ -8,7 +8,7 @@ import { UserController } from './controllers/user.controller';
 import { HelloUserMiddleware } from './middleware';
 
 @Module({
-  controllers: [UserController],
+  controllers: [UserController]
 })
 export class UserModule implements NestModule {
   //NestModule for middleware
